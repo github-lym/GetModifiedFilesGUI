@@ -1,0 +1,5 @@
+bin/*
+obj/*
+GetModifiedFilesGUI/obj
+.vscode/*
+.vs/*

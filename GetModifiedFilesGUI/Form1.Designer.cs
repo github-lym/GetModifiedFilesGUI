@@ -44,10 +44,10 @@ namespace GetModifiedFilesGUI
             this.label4 = new System.Windows.Forms.Label();
             this.folderBrowserDialog_Destination = new System.Windows.Forms.FolderBrowserDialog();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox_ExcludeFolder = new System.Windows.Forms.TextBox();
-            this.textBox_ExcludeExtension = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.button_Execute = new System.Windows.Forms.Button();
+            this.richTextBox_Exclude = new System.Windows.Forms.RichTextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox_Include = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // comboBox_Option
@@ -160,37 +160,11 @@ namespace GetModifiedFilesGUI
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("微軟正黑體", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(13, 330);
+            this.label5.Location = new System.Drawing.Point(13, 424);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(183, 35);
+            this.label5.Size = new System.Drawing.Size(437, 35);
             this.label5.TabIndex = 11;
-            this.label5.Text = "排除的資料夾";
-            // 
-            // textBox_ExcludeFolder
-            // 
-            this.textBox_ExcludeFolder.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_ExcludeFolder.Location = new System.Drawing.Point(19, 368);
-            this.textBox_ExcludeFolder.Name = "textBox_ExcludeFolder";
-            this.textBox_ExcludeFolder.Size = new System.Drawing.Size(564, 31);
-            this.textBox_ExcludeFolder.TabIndex = 12;
-            // 
-            // textBox_ExcludeExtension
-            // 
-            this.textBox_ExcludeExtension.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_ExcludeExtension.Location = new System.Drawing.Point(19, 458);
-            this.textBox_ExcludeExtension.Name = "textBox_ExcludeExtension";
-            this.textBox_ExcludeExtension.Size = new System.Drawing.Size(564, 31);
-            this.textBox_ExcludeExtension.TabIndex = 14;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("微軟正黑體", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(13, 420);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(183, 35);
-            this.label6.TabIndex = 13;
-            this.label6.Text = "排除的副檔名";
+            this.label5.Text = "排除的資料夾與副檔名(Globbing)";
             // 
             // button_Execute
             // 
@@ -203,15 +177,42 @@ namespace GetModifiedFilesGUI
             this.button_Execute.UseVisualStyleBackColor = true;
             this.button_Execute.Click += new System.EventHandler(this.button_Execute_Click);
             // 
+            // richTextBox_Exclude
+            // 
+            this.richTextBox_Exclude.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox_Exclude.Location = new System.Drawing.Point(19, 463);
+            this.richTextBox_Exclude.Name = "richTextBox_Exclude";
+            this.richTextBox_Exclude.Size = new System.Drawing.Size(563, 183);
+            this.richTextBox_Exclude.TabIndex = 16;
+            this.richTextBox_Exclude.Text = "";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("微軟正黑體", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(13, 339);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(465, 35);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "取得檔案(Globbing，空為所有檔案)";
+            // 
+            // textBox_Include
+            // 
+            this.textBox_Include.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_Include.Location = new System.Drawing.Point(18, 377);
+            this.textBox_Include.Name = "textBox_Include";
+            this.textBox_Include.Size = new System.Drawing.Size(564, 31);
+            this.textBox_Include.TabIndex = 18;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(596, 499);
-            this.Controls.Add(this.button_Execute);
-            this.Controls.Add(this.textBox_ExcludeExtension);
+            this.ClientSize = new System.Drawing.Size(596, 665);
+            this.Controls.Add(this.textBox_Include);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox_ExcludeFolder);
+            this.Controls.Add(this.richTextBox_Exclude);
+            this.Controls.Add(this.button_Execute);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button_Destination);
             this.Controls.Add(this.textBox_DestinationPath);
@@ -249,10 +250,10 @@ namespace GetModifiedFilesGUI
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog_Destination;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox_ExcludeFolder;
-        private System.Windows.Forms.TextBox textBox_ExcludeExtension;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button_Execute;
+        private System.Windows.Forms.RichTextBox richTextBox_Exclude;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBox_Include;
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using IniFiles;
+using Microsoft.Extensions.FileSystemGlobbing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace GetModifiedFilesGUI
     public partial class Form1 : Form
     {
         IniFile ini = new IniFile("settings.ini");
-        string noData = "j5W!";
+
         public Form1()
         {
             InitializeComponent();
@@ -62,8 +63,8 @@ namespace GetModifiedFilesGUI
             comboBox_Option.SelectedItem = "無";
             textBox_SourcePath.Text = string.Empty;
             textBox_DestinationPath.Text = string.Empty;
-            textBox_ExcludeFolder.Text = string.Empty;
-            textBox_ExcludeExtension.Text = string.Empty;
+            textBox_Include.Text = string.Empty;
+            richTextBox_Exclude.Text = string.Empty;
             dateTimePicker_Date.Value = DateTime.Now;
             dateTimePicker_Time.Value = DateTime.Now;
         }
@@ -85,14 +86,12 @@ namespace GetModifiedFilesGUI
 
                 if (opt_KeyValues.Keys.Contains("source_path"))
                     textBox_SourcePath.Text = opt_KeyValues["source_path"];
-                if (opt_KeyValues.Keys.Contains("source_path"))
+                if (opt_KeyValues.Keys.Contains("destination_path"))
                     textBox_DestinationPath.Text = opt_KeyValues["destination_path"];
-                if (opt_KeyValues.Keys.Contains("source_path"))
-                    textBox_ExcludeFolder.Text = opt_KeyValues["exclude_folder"];
-                if (opt_KeyValues.Keys.Contains("source_path"))
-                    textBox_ExcludeExtension.Text = opt_KeyValues["exclude_extension"];
-
-                string ddd = string.Empty;
+                if (opt_KeyValues.Keys.Contains("include"))
+                    textBox_Include.Text = opt_KeyValues["include"];
+                if (opt_KeyValues.Keys.Contains("exclude"))
+                    richTextBox_Exclude.Text = opt_KeyValues["exclude"];
             }
         }
         #endregion
@@ -104,7 +103,7 @@ namespace GetModifiedFilesGUI
                 //取得來源目的資料夾
                 string fromPath = textBox_SourcePath.Text.Trim();
                 string toPath = textBox_DestinationPath.Text.Trim();
-                if(string.IsNullOrWhiteSpace(fromPath) || string.IsNullOrWhiteSpace(toPath))
+                if (string.IsNullOrWhiteSpace(fromPath) || string.IsNullOrWhiteSpace(toPath))
                 {
                     MessageBox.Show("Err:來源目標路徑不得為空");
                     return;
@@ -115,21 +114,25 @@ namespace GetModifiedFilesGUI
                     return;
                 }
 
-                //取得排除資料夾
-                string exDir = textBox_ExcludeFolder.Text.Trim();
-                string[] exDirArray;
-                if (!string.IsNullOrWhiteSpace(exDir))
-                    exDirArray = exDir.ToLower().Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                var matcher = new Matcher();
+                var incPatterns = new List<string>();  //所有子目錄底下的檔案
+                var excPatterns = new List<string>();
+                if (string.Empty.Equals(textBox_Include.Text))
+                    incPatterns = new List<string>(new string[] { "**/*" });  //空值為所有子目錄底下的檔案
                 else
-                    exDirArray = new string[1] { noData };
+                {
+                    //取得包含資料夾與副檔名
+                    string inDirFile = textBox_Include.Text.Trim();
+                    if (!string.IsNullOrWhiteSpace(inDirFile))
+                        incPatterns = inDirFile.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                }
+                    
 
-                //取得排除副檔名
-                string exFiles = textBox_ExcludeExtension.Text.Trim();
-                string[] exFilesArray;
-                if (!string.IsNullOrWhiteSpace(exFiles))
-                    exFilesArray = exFiles.ToLower().Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                else
-                    exFilesArray = new string[1] { noData };
+                //取得排除資料夾與副檔名
+                string exDirFile = richTextBox_Exclude.Text.Trim();
+                if (!string.IsNullOrWhiteSpace(exDirFile))
+                    excPatterns = exDirFile.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
 
                 //取得檔案存取的時間
                 DateTime mTime = dateTimePicker_Time.Value;
@@ -145,52 +148,20 @@ namespace GetModifiedFilesGUI
                 if (!Directory.Exists(toPath))
                     Directory.CreateDirectory(toPath);
 
-                //開始找底下包含子目錄所有檔案
-                foreach (string file in Directory.EnumerateFiles(fromPath, "*.*", SearchOption.AllDirectories))
+                //開始找符合檔案
+                matcher.AddIncludePatterns(incPatterns);
+                if (excPatterns.Any())
+                    matcher.AddExcludePatterns(excPatterns);
+                List<string> result = new List<string>();
+                foreach (var file in matcher.GetResultsInFullPath(fromPath))
                 {
-                    bool ex = false;
-                    string _file = file.ToLower();
-
-                    //排除的副檔名
-                    foreach (var item in exFilesArray)
-                    {
-                        if (_file.EndsWith(item))
-                        {
-                            ex = true;
-                            break;
-                        }
-                    }
-                    if (ex)
-                        continue;
-
-                    //存取時間
+                    //比存取時間晚的就跳過
                     if (File.GetLastWriteTime(file) < mDate)
-                        continue;
-
-                    //檢查路徑上所有資料夾  若有排除的資料夾就跳出
-                    string fromSubPath = Path.GetDirectoryName(file).Replace(fromPath, "").ToLower();
-                    if (!string.IsNullOrWhiteSpace(fromSubPath))
-                    {
-                        string[] splitFromSubPath = fromSubPath.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (splitFromSubPath.Length > 0)
-                            foreach (var item in splitFromSubPath)
-                            {
-                                if (exDirArray.Contains(item))
-                                {
-                                    ex = true;
-                                    break;
-                                }
-                            }
-                    }
-                    if (ex)
                         continue;
 
                     //在目的資料夾要架構相同
                     string toFullPath = file.Replace(fromPath, toPath);
                     string subFolder = Path.GetDirectoryName(toFullPath);
-                    //DirectoryInfo info = )
-                    //if (exDirArray.Contains(new DirectoryInfo(subFolder).Name.ToLower()))
-                    //    continue;
 
                     //目標資料夾不存在就產生
                     if (!Directory.Exists(subFolder))

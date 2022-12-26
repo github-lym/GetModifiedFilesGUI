@@ -1,5 +1,6 @@
 ﻿using IniFiles;
 using Microsoft.Extensions.FileSystemGlobbing;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -113,6 +114,9 @@ namespace GetModifiedFilesGUI
         {
             try
             {
+                int count = 0;
+                StringBuilder files = new StringBuilder();
+
                 //取得來源目的資料夾
                 string fromPath = textBox_SourcePath.Text.Trim();
                 string toPath = textBox_DestinationPath.Text.Trim();
@@ -182,9 +186,23 @@ namespace GetModifiedFilesGUI
 
                     //copy overwrite
                     File.Copy(file, toFullPath, true);
+                    count++;
+                    files.AppendLine(toFullPath);
                 }
 
-                MessageBox.Show("完成！!");
+                var dialog = new TaskDialog();
+                dialog.Caption = "結果";
+                dialog.InstructionText = "完成!!";
+                dialog.Text = $"選出 {count} 個檔案";
+                dialog.Icon = TaskDialogStandardIcon.Information;
+                dialog.Cancelable = false;
+
+                dialog.DetailsExpanded = false;
+                dialog.DetailsCollapsedLabel = "顯示明細";
+                dialog.DetailsExpandedLabel = "隱藏明細";
+                dialog.DetailsExpandedText = files.ToString();
+
+                dialog.Show();
             }
             catch (Exception ex)
             {

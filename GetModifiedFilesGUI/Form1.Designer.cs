@@ -53,6 +53,7 @@ namespace GetModifiedFilesGUI
             // 
             // comboBox_Option
             // 
+            this.comboBox_Option.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_Option.Font = new System.Drawing.Font("微軟正黑體", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.comboBox_Option.FormattingEnabled = true;
             this.comboBox_Option.Location = new System.Drawing.Point(152, 14);

@@ -1,6 +1,9 @@
 為了取得新增或有異動的檔案並依照原目錄架構  
 GUI版可以切換模式可能比較方便??  
 \
+20221226  
+新增範例提示按鈕(感謝[黑暗執行緒大大](https://blog.darkthread.net/blog/file-globbing/))
+
 20221223  
 \* framewok 4.5 => 4.6.2(Win10)  
 % 修改為Globbing排除(using Microsoft.Extensions.FileSystemGlobbing)  

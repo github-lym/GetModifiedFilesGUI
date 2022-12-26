@@ -37,6 +37,19 @@ namespace GetModifiedFilesGUI
             //dateTimePicker_Date.ShowUpDown = true;
             dateTimePicker_Time.Format = DateTimePickerFormat.Time;
             dateTimePicker_Time.ShowUpDown = true;
+
+            // Create the ToolTip and associate with the Form container.
+            ToolTip toolTip1 = new ToolTip();
+
+            // Set up the delays for the ToolTip.
+            toolTip1.AutoPopDelay = 2000;
+            toolTip1.InitialDelay = 500;
+            toolTip1.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip1.ShowAlways = true;
+
+            // Set up the ToolTip text for the Button and Checkbox.
+            toolTip1.SetToolTip(this.button_GlobbingExample, "Globbing範例");
         }
 
         #region 選取路徑
@@ -126,7 +139,7 @@ namespace GetModifiedFilesGUI
                     if (!string.IsNullOrWhiteSpace(inDirFile))
                         incPatterns = inDirFile.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
                 }
-                    
+
 
                 //取得排除資料夾與副檔名
                 string exDirFile = richTextBox_Exclude.Text.Trim();
@@ -178,6 +191,23 @@ namespace GetModifiedFilesGUI
                 MessageBox.Show(ex.ToString());
                 throw;
             }
+        }
+
+        private void button_GlobbingExample_Click(object sender, EventArgs e)
+        {
+            StringBuilder tip = new StringBuilder();
+            tip.AppendLine("*.txt	所有 .txt 副檔名");
+            tip.AppendLine("*.*	所有有附檔案名的檔案");
+            tip.AppendLine("*	最上層目錄的所有檔案");
+            tip.AppendLine(".*	以 '.' 起始的檔案");
+            tip.AppendLine("*word*	檔案包含 'word'");
+            tip.AppendLine("readme.*	主檔名 'readme'，附檔名不限");
+            tip.AppendLine("styles/*.css	目錄 'styles/' 下的所有 .css 檔");
+            tip.AppendLine("scripts/*/*	'scripts/' 及第一層子目錄下所有檔案");
+            tip.AppendLine("images*/*	以 'images' 起始目錄下的所有檔案");
+            tip.AppendLine("**/*	所有子目錄的所有檔案");
+            tip.AppendLine("dir/**/*	'dir/'下所有子目錄的所有檔案");
+            MessageBox.Show(tip.ToString());
         }
     }
 }

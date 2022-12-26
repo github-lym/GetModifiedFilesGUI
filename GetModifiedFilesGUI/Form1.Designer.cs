@@ -48,6 +48,7 @@ namespace GetModifiedFilesGUI
             this.richTextBox_Exclude = new System.Windows.Forms.RichTextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox_Include = new System.Windows.Forms.TextBox();
+            this.button_GlobbingExample = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // comboBox_Option
@@ -204,11 +205,23 @@ namespace GetModifiedFilesGUI
             this.textBox_Include.Size = new System.Drawing.Size(564, 31);
             this.textBox_Include.TabIndex = 18;
             // 
+            // button_GlobbingExample
+            // 
+            this.button_GlobbingExample.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_GlobbingExample.Location = new System.Drawing.Point(553, 339);
+            this.button_GlobbingExample.Name = "button_GlobbingExample";
+            this.button_GlobbingExample.Size = new System.Drawing.Size(29, 32);
+            this.button_GlobbingExample.TabIndex = 19;
+            this.button_GlobbingExample.Text = "?";
+            this.button_GlobbingExample.UseVisualStyleBackColor = true;
+            this.button_GlobbingExample.Click += new System.EventHandler(this.button_GlobbingExample_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(596, 665);
+            this.Controls.Add(this.button_GlobbingExample);
             this.Controls.Add(this.textBox_Include);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.richTextBox_Exclude);
@@ -254,6 +267,7 @@ namespace GetModifiedFilesGUI
         private System.Windows.Forms.RichTextBox richTextBox_Exclude;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox_Include;
+        private System.Windows.Forms.Button button_GlobbingExample;
     }
 }
 
